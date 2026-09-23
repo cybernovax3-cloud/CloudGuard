@@ -3249,6 +3249,67 @@ html[data-theme="dark"] .cg-sensor-card {
   #sensors .live-device-status-grid { grid-template-columns: 1fr !important; }
 }
 
+/* ================================================================
+   SAR SATELLITE INTELLIGENCE DEMO
+   ================================================================ */
+.sar-page { --sar-ink: #d9e5e4; --sar-muted: #91a5a5; --sar-panel: rgba(10, 22, 25, .82); --sar-line: rgba(121, 190, 185, .2); }
+.sar-heading { align-items: center; }
+.sar-heading h2 { letter-spacing: .02em; }
+.sar-demo-badge, .sar-demo-banner, .sar-status-dot, .sar-live-pip, .sar-demo-mini, .sar-change-chip, .sar-scene-tag { font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.sar-demo-badge { padding: 8px 12px; border: 1px solid rgba(239,115,115,.5); border-radius: 999px; background: rgba(239,115,115,.12); color: #ef7373; white-space: nowrap; }
+.sar-demo-banner { display: flex; align-items: center; gap: 12px; margin: 0 0 18px; padding: 11px 14px; border: 1px solid rgba(239,115,115,.3); border-radius: 10px; background: linear-gradient(90deg, rgba(239,115,115,.13), rgba(37,99,235,.08)); color: var(--muted); }
+.sar-demo-banner strong { color: #ef7373; white-space: nowrap; }
+.sar-command-grid, .sar-analysis-grid, .sar-bottom-grid { display: grid; gap: 16px; grid-template-columns: 1.5fr 1fr; margin-bottom: 16px; }
+.sar-workspace-grid { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr) 280px; margin-bottom: 16px; }
+.sar-analysis-grid { grid-template-columns: 1.25fr 1fr; }
+.sar-bottom-grid { grid-template-columns: 1.25fr 1fr; }
+.sar-scene-card, .sar-aoi-card, .sar-visual-panel, .sar-layers-panel, .sar-analysis-card, .sar-comparison-card, .sar-timeline-card { padding: 20px !important; }
+.sar-page .panel { border-color: var(--glass-border) !important; }
+.sar-card-heading, .sar-panel-toolbar, .sar-analysis-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+.sar-card-heading h3, .sar-panel-toolbar h3, .sar-analysis-title h3 { margin: 4px 0 0; font-size: 17px; }
+.sar-status-dot { color: #ef7373; }
+.sar-live-pip, .sar-control-count { color: var(--teal); }
+.sar-metadata-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px 20px; margin-top: 22px; }
+.sar-metadata-grid span, .sar-aoi-values span, .sar-stat-row span, .sar-mini-scenes > div > span, .sar-coord-line span { display: block; color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.sar-metadata-grid strong, .sar-aoi-values strong { display: block; margin-top: 5px; color: var(--text); font: 700 14px/1.2 "Space Grotesk", sans-serif; }
+.sar-mono { font-size: 11px !important; letter-spacing: .02em; }
+.sar-aoi-values { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 22px; }
+.sar-coord-line { display: flex; justify-content: space-between; gap: 10px; margin-top: 21px; padding-top: 13px; border-top: 1px solid var(--glass-border); color: var(--muted); font-size: 10px; }
+.sar-coord-line b { color: var(--text); font-size: 10px; font-weight: 600; }
+.sar-scene-tag { color: var(--muted); }
+.sar-visual-panel { background: #071316 !important; border-color: rgba(77,214,197,.28) !important; }
+.sar-visualization { position: relative; min-height: 470px; overflow: hidden; border: 1px solid rgba(133,190,185,.3); border-radius: 10px; background: radial-gradient(ellipse at 58% 44%, #647678 0, #34494a 25%, #182e31 57%, #071316 100%); }
+.sar-visualization::before { content: ""; position: absolute; inset: 0; opacity: .32; background: repeating-linear-gradient(118deg, transparent 0 18px, rgba(216,234,225,.15) 19px 20px, transparent 21px 40px), repeating-linear-gradient(28deg, transparent 0 31px, rgba(4,18,20,.4) 32px 34px, transparent 35px 67px); mix-blend-mode: screen; }
+.sar-grid-lines { position: absolute; inset: 0; opacity: .32; background-image: linear-gradient(rgba(125,205,196,.24) 1px, transparent 1px), linear-gradient(90deg, rgba(125,205,196,.24) 1px, transparent 1px); background-size: 10% 12%; }
+.sar-terrain { position: absolute; border-radius: 50%; filter: blur(1px); transform: rotate(-12deg); opacity: .7; transition: opacity .25s; }
+.terrain-a { inset: 15% 35% 22% 7%; background: repeating-linear-gradient(157deg, transparent 0 11px, rgba(235,245,235,.33) 12px 14px, transparent 15px 25px); clip-path: polygon(4% 45%, 24% 12%, 51% 22%, 72% 0, 100% 30%, 88% 77%, 57% 100%, 25% 82%); }
+.terrain-b { inset: 29% 6% 12% 42%; background: repeating-linear-gradient(25deg, transparent 0 13px, rgba(181,214,202,.29) 14px 16px, transparent 17px 28px); clip-path: polygon(0 26%, 25% 8%, 45% 30%, 75% 8%, 100% 22%, 91% 75%, 56% 100%, 18% 79%); }
+.sar-flood-zone { position: absolute; left: 43%; top: 48%; width: 33%; height: 22%; border: 1px solid #54ded0; background: rgba(38,191,186,.48); clip-path: polygon(0 28%, 24% 0, 55% 13%, 100% 4%, 88% 67%, 56% 100%, 19% 82%); box-shadow: 0 0 24px rgba(43,214,201,.4); transition: opacity .25s; }
+.sar-analysis-boundary { position: absolute; inset: 12% 8% 12% 10%; border: 1px dashed rgba(239,189,103,.85); transition: opacity .25s; }
+.sar-coordinate { position: absolute; color: rgba(214,234,227,.75); font: 10px/1.35 "Space Grotesk", sans-serif; }
+.sar-coordinate small { color: rgba(214,234,227,.5); font-size: 9px; }.sar-coord-tl { top: 18px; left: 18px; }.sar-coord-tr { top: 18px; right: 18px; text-align: right; }.sar-coord-bl { bottom: 18px; left: 18px; }.sar-coord-br { right: 18px; bottom: 18px; text-align: right; }
+.sar-north { position: absolute; top: 20px; left: 50%; display: grid; color: #fff; font-size: 11px; font-weight: 800; text-align: center; transform: translateX(-50%); }.sar-north span { color: #4dd6c5; font-size: 22px; line-height: .9; }
+.sar-scale { position: absolute; bottom: 19px; left: 50%; color: #d8e8e2; font-size: 9px; transform: translateX(-50%); }.sar-scale i { display: block; width: 70px; height: 5px; margin-bottom: 4px; border-right: 1px solid #d8e8e2; border-left: 1px solid #d8e8e2; background: linear-gradient(#d8e8e2, #d8e8e2) center/100% 1px no-repeat; }
+.sar-image-label { position: absolute; top: 18px; right: 22px; color: #fff; font: 700 10px/1.3 "Space Grotesk", sans-serif; letter-spacing: .1em; }.sar-image-label small { color: #9ec5be; font-size: 8px; }.sar-watermark { position: absolute; top: 51%; left: 50%; color: rgba(227,245,239,.42); font-size: 15px; font-weight: 800; letter-spacing: .18em; transform: translate(-50%, -50%) rotate(-18deg); white-space: nowrap; }
+.sar-water-label { position: absolute; left: 52%; top: 54%; color: #baf6ed; font-size: 8px; font-weight: 800; letter-spacing: .08em; }.sar-water-label-two { left: 64%; top: 67%; color: #f1c778; }.sar-page .sar-layer-hidden, .sar-page .is-hidden { opacity: 0 !important; pointer-events: none; }
+.sar-radar-sweep { position: absolute; inset: -50%; background: conic-gradient(from 0deg, rgba(77,214,197,.18) 0deg, rgba(77,214,197,0) 60deg, transparent 360deg); animation: sar-radar-sweep 8s linear infinite; transform-origin: center center; pointer-events: none; }
+@keyframes sar-radar-sweep { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.sar-reticle { position: absolute; top: 50%; left: 50%; width: 220px; height: 220px; border: 1px rgba(77,214,197,.2) dashed; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+.sar-reticle::before { content: ""; position: absolute; top: 50%; left: -20px; right: -20px; height: 1px; background: rgba(77,214,197,.22); }
+.sar-reticle::after { content: ""; position: absolute; left: 50%; top: -20px; bottom: -20px; width: 1px; background: rgba(77,214,197,.22); }
+.sar-reference-layer { position: absolute; inset: 18% 22% 28% 18%; border: 1px solid rgba(164,186,170,.4); background: rgba(164,186,170,.12); transition: opacity .25s; }
+.sar-page:has([data-sar-layer="reference"]:not(:checked)) [data-layer="reference"] { opacity: 0 !important; pointer-events: none; }
+.sar-page:has([data-sar-layer="backscatter"]:not(:checked)) .sar-terrain[data-layer="backscatter"],
+.sar-page:has([data-sar-layer="terrain"]:not(:checked)) .sar-terrain[data-layer="terrain"],
+.sar-page:has([data-sar-layer="flood"]:not(:checked)) [data-layer="flood"],
+.sar-page:has([data-sar-layer="boundary"]:not(:checked)) [data-layer="boundary"] { opacity: 0 !important; pointer-events: none; }
+.sar-layer-list { display: grid; gap: 2px; margin-top: 18px; }.sar-layer-list label { position: relative; display: grid; grid-template-columns: 17px 1fr; grid-template-rows: auto auto; column-gap: 9px; padding: 11px 0; border-bottom: 1px solid var(--glass-border); cursor: pointer; }.sar-layer-list input { position: absolute; opacity: 0; }.sar-toggle { grid-row: 1 / 3; width: 16px; height: 16px; margin-top: 1px; border: 1px solid var(--muted); border-radius: 4px; }.sar-layer-list input:checked + .sar-toggle { border-color: var(--teal); background: var(--teal); box-shadow: inset 0 0 0 3px var(--glass-bg); }.sar-layer-list b { color: var(--text); font-size: 12px; }.sar-layer-list em { color: var(--muted); font-size: 10px; font-style: normal; }.sar-legend { display: grid; gap: 7px; margin-top: 18px; color: var(--muted); font-size: 10px; }.sar-legend i { display: inline-block; width: 9px; height: 9px; margin-right: 5px; border-radius: 2px; }.legend-flood { background: #32c9bb; }.legend-terrain { background: #a4baaa; }.legend-reference { background: rgba(164,186,170,.6); }.legend-boundary { border: 1px dashed #efbd67; }
+.sar-analysis-title { align-items: center; }.sar-analysis-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; background: rgba(77,214,197,.14); color: var(--teal); font-size: 22px; }.sar-analysis-title > div { flex: 1; }.sar-demo-mini { color: var(--muted); }.sar-result-status { display: flex; justify-content: space-between; align-items: center; margin: 20px 0; padding: 11px 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }.sar-result-status span { color: var(--muted); font-size: 11px; }.sar-result-status strong { color: #efbd67; font-size: 12px; }.sar-stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }.sar-stat-row strong { display: block; margin-top: 5px; color: var(--text); font: 700 18px "Space Grotesk", sans-serif; }.terrain-analysis .sar-stat-row { grid-template-columns: repeat(3, 1fr); }.terrain-analysis .sar-result-status strong { color: var(--teal); }
+.sar-change-chip { padding: 7px 9px; border-radius: 5px; background: rgba(239,189,103,.12); color: #efbd67; }.sar-mini-scenes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }.sar-mini-scene { position: relative; height: 120px; margin-top: 8px; overflow: hidden; border: 1px solid var(--glass-border); border-radius: 7px; background: #263b3d; }.sar-mini-scene::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(142deg, transparent 0 13px, rgba(205,230,218,.24) 14px 16px, transparent 17px 29px); }.sar-mini-scene i, .sar-mini-scene b { position: absolute; display: block; }.sar-mini-scene i { left: 52%; top: 44%; width: 40%; height: 40%; background: rgba(48,200,188,.65); clip-path: polygon(0 25%, 35% 0, 100% 20%, 75% 100%, 20% 80%); }.sar-mini-scene b { right: 8%; bottom: 8%; width: 25%; height: 25%; background: rgba(239,189,103,.65); }.reference-scene i { opacity: .18; }.reference-scene b { display: none; }.sar-timeline { display: flex; justify-content: space-between; position: relative; margin-top: 30px; }.sar-timeline::before { content: ""; position: absolute; top: 5px; right: 5%; left: 5%; height: 1px; background: var(--glass-border); }.sar-timeline div { position: relative; z-index: 1; display: grid; gap: 7px; color: var(--muted); font-size: 10px; text-align: center; }.sar-timeline i { width: 11px; height: 11px; margin: 0 auto; border: 2px solid var(--muted); border-radius: 50%; background: var(--bg); }.sar-timeline b { color: var(--text); font-size: 10px; font-weight: 600; }.sar-timeline .latest { color: var(--teal); }.sar-timeline .latest i { border-color: var(--teal); background: var(--teal); box-shadow: 0 0 0 4px rgba(77,214,197,.14); }
+html[data-theme="dark"] .sar-page .panel { background: rgba(16, 28, 31, .8) !important; }
+@media (max-width: 900px) { .sar-workspace-grid, .sar-command-grid, .sar-analysis-grid, .sar-bottom-grid { grid-template-columns: 1fr; } .sar-layers-panel { order: -1; } }
+@media (max-width: 600px) { .sar-metadata-grid, .sar-aoi-values { grid-template-columns: repeat(2, 1fr); }.sar-stat-row, .terrain-analysis .sar-stat-row { grid-template-columns: repeat(2, 1fr); row-gap: 18px; }.sar-demo-banner, .sar-coord-line { align-items: flex-start; flex-direction: column; }.sar-visualization { min-height: 360px; }.sar-watermark { font-size: 10px; }.sar-mini-scenes { grid-template-columns: 1fr; }.sar-timeline { gap: 4px; }.sar-timeline div { font-size: 9px; } }
+
 
 
 

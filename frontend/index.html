@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="en" data-theme="light">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="CloudGuard environmental intelligence and early warning dashboard"><meta name="theme-color" content="#F5F6F8"><title>CloudGuard | Environmental Intelligence</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/style.css?v=neutral-dashboard-2">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="CloudGuard environmental intelligence and early warning dashboard"><meta name="theme-color" content="#F5F6F8"><title>CloudGuard | Environmental Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/style.css?v=neutral-dashboard-3">
 </head>
 <body><div class="app-shell">
 <aside class="sidebar" id="sidebar"><div class="brand"><div class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></div><div><strong>CLOUDGUARD</strong><span>ENVIRONMENTAL INTELLIGENCE</span></div></div><div class="sidebar-caption">OPERATIONS</div><nav class="nav" aria-label="Primary navigation">
-<button class="nav-item active" data-section="overview"><span class="nav-symbol">⌂</span>Overview</button><button class="nav-item" data-section="sensors"><span class="nav-symbol">⌁</span>Live Sensors</button><button class="nav-item" data-section="risks"><span class="nav-symbol">◈</span>Risk Intelligence</button><button class="nav-item" data-section="forecast"><span class="nav-symbol">↗</span>6-Hour Warning</button><button class="nav-item" data-section="camera"><span class="nav-symbol">▣</span>Camera Vision</button><button class="nav-item" data-section="alerts"><span class="nav-symbol">!</span>Alert Center <b id="sidebar-alert-count">0</b></button><button class="nav-item" data-section="reports"><span class="nav-symbol">▤</span>Reports</button><button class="nav-item" data-section="map-page"><span class="nav-symbol">◎</span>Monitoring Map</button><button class="nav-item" data-section="settings"><span class="nav-symbol">⚙</span>Settings</button>
+<button class="nav-item active" data-section="overview"><span class="nav-symbol">⌂</span>Overview</button><button class="nav-item" data-section="sensors"><span class="nav-symbol">⌁</span>Live Sensors</button><button class="nav-item" data-section="risks"><span class="nav-symbol">◈</span>Risk Intelligence</button><button class="nav-item" data-section="forecast"><span class="nav-symbol">↗</span>6-Hour Warning</button><button class="nav-item" data-section="camera"><span class="nav-symbol">▣</span>Camera Vision</button><button class="nav-item" data-section="alerts"><span class="nav-symbol">!</span>Alert Center <b id="sidebar-alert-count">0</b></button><button class="nav-item" data-section="reports"><span class="nav-symbol">▤</span>Reports</button><button class="nav-item" data-section="map-page"><span class="nav-symbol">◎</span>Monitoring Map</button><button class="nav-item" data-section="sar-page"><span class="nav-symbol">◒</span>SAR Intelligence</button><button class="nav-item" data-section="settings"><span class="nav-symbol">⚙</span>Settings</button>
 </nav>
 <div class="node-summary"><div class="eyebrow">ACTIVE NODE <span class="status-dot" id="station-dot"></span><em id="sidebar-node-pill">OFFLINE</em></div><strong id="station-id">N/A</strong><span id="station-message">Waiting for sensor data</span><div class="node-state" id="station-status">Offline</div></div><div class="sidebar-footer"><span><i class="status-dot online"></i> Secure monitoring channel</span><small>CLOUDGUARD</small></div></aside>
 
@@ -75,9 +75,11 @@
       <div><span class="eyebrow">ACTIVE NODES</span><strong id="overview-node-count">N/A</strong></div>
       <div><span class="eyebrow">LAST SYNC</span><strong id="overview-last-sync">N/A</strong></div>
     </section>
+    <div class="health-grid" id="health-grid" style="display:none"></div>
+    <span class="data-state" id="data-note" style="display:none">No live data</span>
     <div class="overview-section-heading"><span>01 — OPERATIONAL SUMMARY</span><small>Current situation at a glance</small></div>
     <section class="overview-kpi-grid" aria-label="Operational summary">
-      <article class="overview-kpi"><span class="eyebrow">OVERALL RISK</span><strong><span id="overall-score">N/A</span><small>/100</small></strong><span id="overall-status" class="risk-badge unknown">N/A</span><p id="overview-risk-message">Waiting for data</p></article>
+      <article class="overview-kpi"><span class="eyebrow">OVERALL RISK</span><strong><span id="overall-score">N/A</span><small>/100</small></strong><span id="overall-status" class="risk-badge unknown">N/A</span><span id="overall-meter" style="display:none"></span><span id="overall-description" style="display:none"></span><p id="overview-risk-message">Waiting for data</p></article>
       <article class="overview-kpi"><span class="eyebrow">ACTIVE ALERTS</span><strong id="alert-count">0</strong><span class="overview-kpi-status warning">Requires attention</span><p>Backend-reported events</p></article>
       <article class="overview-kpi"><span class="eyebrow">SENSOR NODES</span><strong id="overview-sensor-status">N/A</strong><span class="overview-kpi-status">Online / Offline</span><p id="overview-sensor-detail">No data received</p></article>
       <article class="overview-kpi"><span class="eyebrow">FORECAST</span><strong id="forecast-status">N/A</strong><span class="overview-kpi-status">Next 6 hours</span><p id="overview-forecast-detail">Forecast unavailable</p></article>
@@ -85,7 +87,7 @@
     <div class="overview-section-heading"><span>02 — LIVE ENVIRONMENTAL TELEMETRY</span><small>Real-time readings from connected monitoring devices</small></div>
     <section class="overview-telemetry-grid" id="metric-grid" aria-label="Live environmental telemetry"></section>
     <div class="overview-section-heading"><span>03 — CURRENT RISK INTELLIGENCE</span><small>Assessment based on available sensor telemetry</small></div>
-    <section class="overview-risk-grid" id="risk-grid" aria-label="Current environmental risk"></section>
+    <section class="overview-risk-grid" id="overview-risk-grid" aria-label="Current environmental risk"></section>
     <div class="overview-section-heading"><span>04 — PREDICTION &amp; EARLY WARNING</span><small>Model-based outlook from current trends</small></div>
     <section class="overview-prediction-grid" id="prediction-grid" aria-label="Prediction and early warning">
       <article class="overview-prediction"><span class="eyebrow">NEXT 1 HOUR</span><span id="pred-1h-badge" class="risk-badge unknown">N/A</span><strong id="pred-1h-score">--%</strong><p>Rain <b id="pred-1h-rain">N/A</b> · Water <b id="pred-1h-water">N/A</b></p><div id="pred-1h-trend"><span>Trend</span><strong>--</strong></div></article>
@@ -103,116 +105,8 @@
     <div class="overview-section-heading"><span>10 — MONITORING PIPELINE</span><small>From sensing to response</small></div>
     <article class="overview-pipeline panel"><div class="overview-pipeline-grid"><div><b>01</b><span>SENSORS</span></div><div><b>02</b><span>EDGE PROCESSING</span></div><div><b>03</b><span>AI RISK</span></div><div><b>04</b><span>6-HOUR FORECAST</span></div><div><b>05</b><span>CAMERA</span></div><div><b>06</b><span>ALERT &amp; ACTION</span></div></div></article>
   </div>
+</section>
 
-  <!-- ═══════════ 1. RISK PREDICTION SECTION ═══════════ -->
-  <div class="section-heading">
-    <div>
-      <div class="eyebrow">FORECAST &amp; OUTLOOK</div>
-      <h2>Risk Prediction</h2>
-      <p>Forecasted environmental risk based on current conditions and recent trends.</p>
-    </div>
-  </div>
-
-  <div class="prediction-grid" id="prediction-grid">
-    <article class="panel prediction-card">
-      <div class="prediction-card-header">
-        <span class="eyebrow">NEXT 1H RISK</span>
-        <span class="risk-badge unknown" id="pred-1h-badge">N/A</span>
-      </div>
-      <div class="prediction-score-row">
-        <strong id="pred-1h-score">--%</strong>
-      </div>
-      <div class="prediction-meta">
-        <div><span>Predicted Rainfall</span><strong id="pred-1h-rain">-- mm</strong></div>
-        <div><span>Predicted Water Level</span><strong id="pred-1h-water">-- m</strong></div>
-      </div>
-      <div class="prediction-trend" id="pred-1h-trend">
-        <span>Risk trend</span> <strong>--</strong>
-      </div>
-    </article>
-
-    <article class="panel prediction-card">
-      <div class="prediction-card-header">
-        <span class="eyebrow">NEXT 3H RISK</span>
-        <span class="risk-badge unknown" id="pred-3h-badge">N/A</span>
-      </div>
-      <div class="prediction-score-row">
-        <strong id="pred-3h-score">--%</strong>
-      </div>
-      <div class="prediction-meta">
-        <div><span>Predicted Rainfall</span><strong id="pred-3h-rain">-- mm</strong></div>
-        <div><span>Predicted Water Level</span><strong id="pred-3h-water">-- m</strong></div>
-      </div>
-      <div class="prediction-trend" id="pred-3h-trend">
-        <span>Risk trend</span> <strong>--</strong>
-      </div>
-    </article>
-
-    <article class="panel prediction-card">
-      <div class="prediction-card-header">
-        <span class="eyebrow">NEXT 6H RISK</span>
-        <span class="risk-badge unknown" id="pred-6h-badge">N/A</span>
-      </div>
-      <div class="prediction-score-row">
-        <strong id="pred-6h-score">--%</strong>
-      </div>
-      <div class="prediction-meta">
-        <div><span>Predicted Rainfall</span><strong id="pred-6h-rain">-- mm</strong></div>
-        <div><span>Predicted Water Level</span><strong id="pred-6h-water">-- m</strong></div>
-      </div>
-      <div class="prediction-trend" id="pred-6h-trend">
-        <span>Risk trend</span> <strong>--</strong>
-      </div>
-    </article>
-  </div>
-
-  <!-- ═══════════ 2. WEATHER INTELLIGENCE SECTION ═══════════ -->
-  <div class="section-heading">
-    <div>
-      <div class="eyebrow">ATMOSPHERIC MONITORING</div>
-      <h2>Weather</h2>
-      <p>Current conditions and short-term weather forecast.</p>
-    </div>
-  </div>
-
-  <article class="panel weather-panel" id="weather-panel">
-    <div class="weather-grid">
-      <div class="weather-current-card">
-        <span class="eyebrow">CURRENT CONDITIONS</span>
-        <div class="weather-hero">
-          <span class="weather-icon" id="weather-icon">☁</span>
-          <div>
-            <strong id="weather-temp">--°C</strong>
-            <span id="weather-condition" class="muted">Awaiting data</span>
-          </div>
-        </div>
-        <div class="weather-details">
-          <div><span>Rain</span> <strong id="weather-rain">--</strong></div>
-          <div><span>Rain probability</span> <strong id="weather-rain-prob">--%</strong></div>
-          <div><span>Wind</span> <strong id="weather-wind">--</strong></div>
-          <div><span>Humidity</span> <strong id="weather-humidity">--%</strong></div>
-        </div>
-      </div>
-
-      <div class="weather-hourly-card">
-        <span class="eyebrow">HOURLY FORECAST</span>
-        <div class="hourly-forecast-scroll" id="hourly-forecast-list">
-          <div class="hourly-empty">Awaiting forecast telemetry...</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="weather-warning-banner" id="weather-warning-banner" style="display:none">
-      <div class="warning-icon">⚠</div>
-      <div>
-        <strong>WEATHER WARNING</strong>
-        <p id="weather-warning-message">Heavy rainfall expected. Monitor water levels closely.</p>
-      </div>
-    </div>
-  </article>
-
-  <!-- ═══════════ EXISTING DASHBOARD SECTIONS ═══════════ -->
-  <div class="hero-grid"><article class="panel risk-hero"><div class="panel-heading"><div><div class="eyebrow">CURRENT ENVIRONMENTAL RISK</div><h2>Operational Risk</h2></div><span class="live-chip"><i></i> LIVE</span></div><div class="risk-readout"><div><strong id="overall-score">N/A</strong><span>/100</span></div><span class="risk-badge unknown" id="overall-status">N/A</span></div><div class="meter"><span id="overall-meter"></span></div><div class="meter-labels"><span>LOW</span><span>MODERATE</span><span>HIGH</span><span>CRITICAL</span></div><p class="ai-summary"><i></i><span id="overall-description">Waiting for live sensor data.</span></p></article><article class="panel forecast-hero"><div class="panel-heading"><div><div class="eyebrow">PREDICTIVE INTELLIGENCE</div><h2>6-Hour Early Warning</h2></div><span class="panel-glyph">↗</span></div><div class="forecast-flow"><div><small>CURRENT</small><strong id="forecast-current-status">N/A</strong></div><b>→</b><div><small>+6 HOURS</small><strong id="forecast-status">N/A</strong></div></div><div class="forecast-facts"><div><small>PREDICTED RISK</small><strong><span id="forecast-score">N/A</span><small>/100</small></strong></div><div><small>CONFIDENCE</small><strong id="forecast-confidence">N/A</strong></div><div><small>HAZARD</small><strong id="forecast-hazard">N/A</strong></div></div><p class="muted" id="forecast-message">Collecting historical sensor data...</p><small class="disclaimer">Model-based forecast. Not a guaranteed prediction.</small></article></div><div class="section-heading"><div><div class="eyebrow">SYSTEM HEALTH</div><h2>Monitoring Pipeline</h2></div><span class="data-state" id="data-note">No live data</span></div><div class="health-grid" id="health-grid"></div><div class="section-heading"><div><div class="eyebrow">LIVE TELEMETRY</div><h2>Environmental Conditions</h2></div></div><div class="metric-grid" id="metric-grid"></div><div class="split-grid"><article class="panel chart-panel"><div class="panel-heading"><div><div class="eyebrow">REAL-TIME DATA</div><h2>Environmental Trend</h2></div><select id="chart-select" aria-label="Select telemetry chart"><option value="temperature">Temperature</option><option value="rainfall">Rainfall</option><option value="water_level">Water Level</option><option value="mq135_raw">Air Quality</option></select></div><div class="chart-stats"><div><small>CURRENT</small><strong id="chart-current">N/A</strong></div><div><small>MIN</small><strong id="chart-min">N/A</strong></div><div><small>MAX</small><strong id="chart-max">N/A</strong></div></div><div class="chart-wrap"><canvas id="telemetry-chart"></canvas><span class="chart-empty" id="chart-empty">Waiting for sensor telemetry...</span></div></article><article class="panel"><div class="panel-heading"><div><div class="eyebrow">ATTENTION QUEUE</div><h2>Recent Alerts</h2></div><span class="count" id="alert-count">0</span></div><div class="alert-list" id="alert-list"><div class="empty-state">No alerts received from backend.</div></div></article></div><div class="split-grid map-split"><article class="panel"><div class="panel-heading"><div><div class="eyebrow">FIELD COVERAGE</div><h2>Monitoring Map</h2></div><span class="map-live">● LIVE NODE</span></div><div class="map-container-wrap"><div class="map" id="map"></div></div><p class="map-note" id="map-note">Waiting for live node coordinates.</p></article><article class="panel pipeline-panel"><div class="eyebrow">CLOUDGUARD PIPELINE</div><h2>From sensing to action</h2><div class="pipeline"><div><b>01</b><span>SENSORS</span></div><div><b>02</b><span>EDGE PROCESSING</span></div><div><b>03</b><span>AI RISK ANALYSIS</span></div><div><b>04</b><span>6-HOUR FORECAST</span></div><div><b>05</b><span>CAMERA VERIFICATION</span></div><div><b>06</b><span>ALERT &amp; ACTION</span></div></div></article></div></section>
 
 <section id="sensors" class="page-section live-sensors-page cg-live-sensors">
   <div class="section-heading page-heading">
@@ -378,6 +272,15 @@
     <div class="panel-heading"><div><div class="eyebrow">EVENT LOG</div><h2>Environmental Alert Timeline</h2></div><span class="data-state">BACKEND EVENTS</span></div>
     <div class="alert-list" id="alert-page-list"><div class="empty-state">No alerts received from backend.</div></div>
   </article>
+</section>
+
+<!-- =============================================================== SAR SATELLITE INTELLIGENCE PAGE -->
+<section id="sar-page" class="page-section sar-page">
+  <div class="section-heading page-heading sar-heading"><div><div class="eyebrow">SATELLITE OPERATIONS</div><h2>SAR SATELLITE INTELLIGENCE</h2><p>Synthetic Aperture Radar monitoring for flood and terrain-change analysis</p></div></div>
+  <div class="sar-command-grid"><article class="panel sar-scene-card"><div class="sar-card-heading"><div><span class="eyebrow">SCENE METADATA</span><h3>Acquisition Brief</h3></div><span class="sar-status-dot">DEMO</span></div><div class="sar-metadata-grid"><div><span>SATELLITE</span><strong>Sentinel-1</strong></div><div><span>POLARIZATION</span><strong>VV</strong></div><div><span>ACQUISITION</span><strong id="sar-acquisition">23 Sep 2026 · 10:42 UTC</strong></div><div><span>RESOLUTION</span><strong>10 m</strong></div><div><span>COVERAGE</span><strong>48.2 km²</strong></div><div><span>SCENE ID</span><strong class="sar-mono">S1A_DEMO_20260923_1042</strong></div></div></article><article class="panel sar-aoi-card"><div class="sar-card-heading"><div><span class="eyebrow">SAR AREA OF INTEREST</span></div><span class="sar-live-pip">SIMULATED</span></div><div class="sar-aoi-values"><div><span>LATITUDE</span><strong>13.0827°</strong></div><div><span>LONGITUDE</span><strong>80.2707°</strong></div><div><span>COVERAGE</span><strong>48.2 km²</strong></div></div><div class="sar-coord-line"><span>AOI CENTER</span><b>13°04'57.7&quot;N · 80°16'14.5&quot;E</b></div></article></div>
+  <div class="sar-workspace-grid"><article class="panel sar-visual-panel"><div class="sar-panel-toolbar"><div><span class="eyebrow">BACKSCATTER ANALYSIS</span><h3>Floodplain Scene / VV Polarization</h3></div><span class="sar-scene-tag">SENTINEL-1 · DEMO</span></div><div class="sar-visualization" id="sar-visualization"><div class="sar-grid-lines"></div><div class="sar-radar-sweep"></div><div class="sar-reticle"></div><div class="sar-reference-layer sar-layer-hidden" data-layer="reference"></div><div class="sar-terrain terrain-a" data-layer="backscatter"></div><div class="sar-terrain terrain-b" data-layer="terrain"></div><div class="sar-flood-zone" data-layer="flood"></div><div class="sar-analysis-boundary" data-layer="boundary"></div><div class="sar-coordinate sar-coord-tl">13.116° N<br><small>80.241° E</small></div><div class="sar-coordinate sar-coord-tr">13.116° N<br><small>80.301° E</small></div><div class="sar-coordinate sar-coord-bl">13.049° N<br><small>80.241° E</small></div><div class="sar-coordinate sar-coord-br">13.049° N<br><small>80.301° E</small></div><div class="sar-north">N<span>↑</span></div><div class="sar-scale"><i></i><span>5 km</span></div><span class="sar-water-label" data-layer="flood">POTENTIAL FLOODING</span><span class="sar-water-label sar-water-label-two" data-layer="flood">CHANGE ZONE 01</span><div class="sar-image-label">SENTINEL-1<br><small>VV / 10 m</small></div></div></article><article class="panel sar-layers-panel"><div class="sar-card-heading"><div><span class="eyebrow">ANALYSIS LAYERS</span><h3>Scene Controls</h3></div><span class="sar-control-count" id="sar-layer-count">4 ACTIVE</span></div><div class="sar-layer-list"><label><input type="checkbox" data-sar-layer="backscatter" checked><span class="sar-toggle"></span><b>SAR Backscatter</b><em>VV intensity</em></label><label><input type="checkbox" data-sar-layer="flood" checked><span class="sar-toggle"></span><b>Flood Change</b><em>12.6 km² affected</em></label><label><input type="checkbox" data-sar-layer="terrain" checked><span class="sar-toggle"></span><b>Terrain Change</b><em>3 zones detected</em></label><label><input type="checkbox" data-sar-layer="reference"><span class="sar-toggle"></span><b>Reference Scene</b><em>18 Sep 2026</em></label><label><input type="checkbox" data-sar-layer="boundary" checked><span class="sar-toggle"></span><b>Scene Boundary</b><em>AOI perimeter</em></label></div><div class="sar-legend"><span><i class="legend-flood"></i> Flood change</span><span><i class="legend-terrain"></i> Terrain change</span><span><i class="legend-reference"></i> Reference scene</span><span><i class="legend-boundary"></i> Scene boundary</span></div></article></div>
+  <div class="sar-analysis-grid"><article class="panel sar-analysis-card flood-analysis"><div class="sar-analysis-title"><span class="sar-analysis-icon">≈</span><div><span class="eyebrow">SAR CHANGE DETECTION</span><h3>Flood Analysis</h3></div><span class="sar-demo-mini">DEMO RESULT</span></div><div class="sar-result-status"><span>Status</span><strong>POTENTIAL FLOODING</strong></div><div class="sar-stat-row"><div><span>CHANGE DETECTED</span><strong>YES</strong></div><div><span>AFFECTED AREA</span><strong id="sar-affected-area">12.6 km²</strong></div><div><span>CHANGE</span><strong id="sar-change-percent">26.4%</strong></div><div><span>CONFIDENCE</span><strong id="sar-flood-confidence">87%</strong></div></div></article><article class="panel sar-analysis-card terrain-analysis"><div class="sar-analysis-title"><span class="sar-analysis-icon">⌁</span><div><span class="eyebrow">SURFACE MONITORING</span><h3>Terrain Change</h3></div><span class="sar-demo-mini">DEMO RESULT</span></div><div class="sar-result-status"><span>Status</span><strong>MONITORING</strong></div><div class="sar-stat-row"><div><span>SURFACE CHANGE</span><strong>8.7%</strong></div><div><span>CHANGE ZONES</span><strong>3</strong></div><div><span>CONFIDENCE</span><strong>79%</strong></div></div></article></div>
+  <div class="sar-bottom-grid"><article class="panel sar-comparison-card"><div class="sar-card-heading"><div><span class="eyebrow">SCENE COMPARISON</span><h3>Reference vs Current</h3></div><span class="sar-change-chip">CHANGE DETECTED · YES</span></div><div class="sar-mini-scenes"><div><span>REFERENCE · 18 SEP 2026</span><div class="sar-mini-scene reference-scene"><i></i><b></b></div></div><div><span>CURRENT · 23 SEP 2026</span><div class="sar-mini-scene current-scene"><i></i><b></b></div></div></div></article><article class="panel sar-timeline-card"><div class="sar-card-heading"><div><span class="eyebrow">ACQUISITION HISTORY</span><h3>SAR Timeline</h3></div></div><div class="sar-timeline"><div><i></i><span>18 Sep</span><b>Reference</b></div><div><i></i><span>20 Sep</span><b>Scene</b></div><div><i></i><span>22 Sep</span><b>Scene</b></div><div class="latest"><i></i><span>23 Sep</span><b>Latest</b></div></div></article></div>
 </section>
 
 <!-- ═══════════ MONITORING MAP PAGE ═══════════ -->
@@ -614,7 +517,8 @@
 <div id="notification-live-announcer" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
 
 <!-- Load local configuration before main script -->
+<script src="config/config.js"></script>
 <script src="config/config.example.js"></script>
-<script src="js/script.js?v=operations-dashboard-3"></script>
+<script src="js/script.js?v=operations-dashboard-4-fix"></script>
 </body>
 </html>
