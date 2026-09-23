@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="CloudGuard environmental intelligence and early warning dashboard"><meta name="theme-color" content="#F5F6F8"><title>CloudGuard | Environmental Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/style.css?v=neutral-dashboard-2">
+</head>
+<body><div class="app-shell">
+<aside class="sidebar" id="sidebar"><div class="brand"><div class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></div><div><strong>CLOUDGUARD</strong><span>ENVIRONMENTAL INTELLIGENCE</span></div></div><div class="sidebar-caption">OPERATIONS</div><nav class="nav" aria-label="Primary navigation">
+<button class="nav-item active" data-section="overview"><span class="nav-symbol">⌂</span>Overview</button><button class="nav-item" data-section="sensors"><span class="nav-symbol">⌁</span>Live Sensors</button><button class="nav-item" data-section="risks"><span class="nav-symbol">◈</span>Risk Intelligence</button><button class="nav-item" data-section="forecast"><span class="nav-symbol">↗</span>6-Hour Warning</button><button class="nav-item" data-section="camera"><span class="nav-symbol">▣</span>Camera Vision</button><button class="nav-item" data-section="alerts"><span class="nav-symbol">!</span>Alert Center <b id="sidebar-alert-count">0</b></button><button class="nav-item" data-section="reports"><span class="nav-symbol">▤</span>Reports</button><button class="nav-item" data-section="map-page"><span class="nav-symbol">◎</span>Monitoring Map</button><button class="nav-item" data-section="settings"><span class="nav-symbol">⚙</span>Settings</button>
+</nav>
+<div class="node-summary"><div class="eyebrow">ACTIVE NODE <span class="status-dot" id="station-dot"></span><em id="sidebar-node-pill">OFFLINE</em></div><strong id="station-id">N/A</strong><span id="station-message">Waiting for sensor data</span><div class="node-state" id="station-status">Offline</div></div><div class="sidebar-footer"><span><i class="status-dot online"></i> Secure monitoring channel</span><small>CLOUDGUARD</small></div></aside>
+
+<main class="main-content">
+<header class="topbar">
+  <button class="mobile-menu" id="mobile-menu" aria-label="Open navigation">☰</button>
+  <div><div class="breadcrumb">CLOUDGUARD <span>/</span> LIVE OPERATIONS</div><h1 id="page-title">Environmental Overview</h1><p id="page-description">AI-powered environmental monitoring and proactive early warning</p></div>
+  <div class="topbar-actions">
+    <button class="mock-data-toggle" id="mock-data-toggle" type="button" aria-label="Use mock data instead of live IoT data" aria-pressed="false"><span aria-hidden="true">◇</span><span id="mock-data-label">Mock Data</span></button>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Switch theme"><span id="theme-icon">L</span><span id="theme-label">Light</span></button>
+    <div class="backend-indicator" id="backend-state"><i class="status-dot"></i><span id="connection-status">Backend Offline</span></div>
+    <div class="sync"><span>LAST SYNC</span><strong id="last-updated">N/A</strong></div>
+
+    <!-- ═══════════ NOTIFICATION CENTER ═══════════ -->
+    <div class="notification-container">
+      <button class="notif-bell-btn" id="notification-button"
+              aria-label="Notifications — open notification center"
+              aria-expanded="false" aria-haspopup="dialog">
+        <svg class="notif-bell-icon" viewBox="0 0 24 24" width="17" height="17"
+             fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="notif-badge" id="notification-badge" style="display:none" aria-label="unread notifications">0</span>
+      </button>
+
+      <div class="notif-dropdown" id="notification-dropdown"
+           role="dialog" aria-label="Notification Center" hidden>
+        <div class="notif-panel-header">
+          <div class="notif-panel-header-left">
+            <span class="notif-panel-title">NOTIFICATIONS</span>
+            <span class="notif-panel-count" id="notification-header-badge">0 unread</span>
+          </div>
+          <div class="notif-panel-header-right">
+            <button type="button" class="notif-mark-all-btn" id="mark-all-read-btn"
+                    aria-label="Mark all notifications as read">Mark all read</button>
+            <button type="button" class="notif-close-btn" id="notification-close-btn"
+                    aria-label="Close notification panel">✕</button>
+          </div>
+        </div>
+        <div class="notif-panel-body" id="notification-list"
+             role="feed" aria-label="Notification list" aria-busy="false">
+          <!-- Populated by NotificationManager -->
+        </div>
+        <div class="notif-panel-footer">
+          <button type="button" class="notif-view-all-btn" id="view-all-notifications-btn">
+            View all notifications →
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- ════════════════════════════════════════════ -->
+
+  </div>
+</header>
+
+<div class="offline-banner" id="offline-banner"><strong>Backend unavailable</strong><span>Live environmental intelligence is temporarily unavailable.</span></div>
+
+<section id="overview" class="page-section active-section">
+
+  <div class="overview-command-dashboard">
+    <section class="overview-status-strip" aria-label="System status">
+      <div><span class="eyebrow">SYSTEM STATUS</span><strong id="overview-system-status">Operational</strong></div>
+      <div><span class="eyebrow">BACKEND</span><strong id="overview-backend-status">Offline</strong></div>
+      <div><span class="eyebrow">ACTIVE NODES</span><strong id="overview-node-count">N/A</strong></div>
+      <div><span class="eyebrow">LAST SYNC</span><strong id="overview-last-sync">N/A</strong></div>
+    </section>
+    <div class="overview-section-heading"><span>01 — OPERATIONAL SUMMARY</span><small>Current situation at a glance</small></div>
+    <section class="overview-kpi-grid" aria-label="Operational summary">
+      <article class="overview-kpi"><span class="eyebrow">OVERALL RISK</span><strong><span id="overall-score">N/A</span><small>/100</small></strong><span id="overall-status" class="risk-badge unknown">N/A</span><p id="overview-risk-message">Waiting for data</p></article>
+      <article class="overview-kpi"><span class="eyebrow">ACTIVE ALERTS</span><strong id="alert-count">0</strong><span class="overview-kpi-status warning">Requires attention</span><p>Backend-reported events</p></article>
+      <article class="overview-kpi"><span class="eyebrow">SENSOR NODES</span><strong id="overview-sensor-status">N/A</strong><span class="overview-kpi-status">Online / Offline</span><p id="overview-sensor-detail">No data received</p></article>
+      <article class="overview-kpi"><span class="eyebrow">FORECAST</span><strong id="forecast-status">N/A</strong><span class="overview-kpi-status">Next 6 hours</span><p id="overview-forecast-detail">Forecast unavailable</p></article>
+    </section>
+    <div class="overview-section-heading"><span>02 — LIVE ENVIRONMENTAL TELEMETRY</span><small>Real-time readings from connected monitoring devices</small></div>
+    <section class="overview-telemetry-grid" id="metric-grid" aria-label="Live environmental telemetry"></section>
+    <div class="overview-section-heading"><span>03 — CURRENT RISK INTELLIGENCE</span><small>Assessment based on available sensor telemetry</small></div>
+    <section class="overview-risk-grid" id="risk-grid" aria-label="Current environmental risk"></section>
+    <div class="overview-section-heading"><span>04 — PREDICTION &amp; EARLY WARNING</span><small>Model-based outlook from current trends</small></div>
+    <section class="overview-prediction-grid" id="prediction-grid" aria-label="Prediction and early warning">
+      <article class="overview-prediction"><span class="eyebrow">NEXT 1 HOUR</span><span id="pred-1h-badge" class="risk-badge unknown">N/A</span><strong id="pred-1h-score">--%</strong><p>Rain <b id="pred-1h-rain">N/A</b> · Water <b id="pred-1h-water">N/A</b></p><div id="pred-1h-trend"><span>Trend</span><strong>--</strong></div></article>
+      <article class="overview-prediction"><span class="eyebrow">NEXT 3 HOURS</span><span id="pred-3h-badge" class="risk-badge unknown">N/A</span><strong id="pred-3h-score">--%</strong><p>Rain <b id="pred-3h-rain">N/A</b> · Water <b id="pred-3h-water">N/A</b></p><div id="pred-3h-trend"><span>Trend</span><strong>--</strong></div></article>
+      <article class="overview-prediction"><span class="eyebrow">NEXT 6 HOURS</span><span id="pred-6h-badge" class="risk-badge unknown">N/A</span><strong id="pred-6h-score">--%</strong><p>Rain <b id="pred-6h-rain">N/A</b> · Water <b id="pred-6h-water">N/A</b></p><div id="pred-6h-trend"><span>Trend</span><strong>--</strong></div></article>
+    </section>
+    <div class="overview-section-heading"><span>05 — WEATHER &amp; ATMOSPHERIC CONDITIONS</span><small>Current conditions and available forecast telemetry</small></div>
+    <article class="overview-weather panel" id="weather-panel"><div class="overview-weather-current"><span class="eyebrow">CURRENT CONDITIONS</span><div class="overview-weather-hero"><span id="weather-icon">☁</span><div><strong id="weather-temp">N/A</strong><span id="weather-condition">Awaiting data</span></div></div><div class="overview-weather-details"><div>Rain <b id="weather-rain">N/A</b></div><div>Rain probability <b id="weather-rain-prob">N/A</b></div><div>Wind <b id="weather-wind">N/A</b></div><div>Humidity <b id="weather-humidity">N/A</b></div></div></div><div class="overview-hourly"><span class="eyebrow">HOURLY FORECAST</span><div id="hourly-forecast-list"><span class="overview-empty">Hourly forecast unavailable</span></div></div><div class="overview-weather-warning" id="weather-warning-banner" style="display:none"><b>WEATHER WARNING</b><span id="weather-warning-message"></span></div></article>
+    <div class="overview-section-heading"><span>07 — ENVIRONMENTAL TRENDS</span><small>Historical telemetry from the active monitoring network</small></div>
+    <article class="overview-trend panel"><div class="overview-panel-heading"><div><span class="eyebrow">REAL-TIME DATA</span><h2>Environmental Trend</h2></div><select id="chart-select" aria-label="Select telemetry chart"><option value="temperature">Temperature</option><option value="rainfall">Rainfall</option><option value="water_level">Water Level</option><option value="mq135_raw">Air Quality</option></select></div><div class="chart-stats"><div><small>CURRENT</small><strong id="chart-current">N/A</strong></div><div><small>MIN</small><strong id="chart-min">N/A</strong></div><div><small>MAX</small><strong id="chart-max">N/A</strong></div></div><div class="chart-wrap"><canvas id="telemetry-chart"></canvas><span class="chart-empty" id="chart-empty">Waiting for sensor telemetry...</span></div></article>
+    <div class="overview-section-heading"><span>08 — RECENT ALERTS</span><small>Attention queue from the backend</small></div>
+    <article class="overview-alerts panel"><div class="overview-panel-heading"><div><span class="eyebrow">ATTENTION QUEUE</span><h2>Recent Alerts</h2></div><span class="count" id="overview-alert-count">0</span></div><div class="alert-list" id="alert-list"><div class="empty-state">No alerts received from backend.</div></div></article>
+    <div class="overview-section-heading"><span>09 — FIELD COVERAGE</span><small>Live device locations and risk zones</small></div>
+    <article class="overview-map panel"><div class="overview-panel-heading"><div><span class="eyebrow">FIELD COVERAGE</span><h2>Monitoring Map</h2></div><span class="map-live">● LIVE NODE</span></div><div class="map-container-wrap"><div class="map" id="map"></div></div><p class="map-note" id="map-note">Waiting for live node coordinates.</p></article>
+    <div class="overview-section-heading"><span>10 — MONITORING PIPELINE</span><small>From sensing to response</small></div>
+    <article class="overview-pipeline panel"><div class="overview-pipeline-grid"><div><b>01</b><span>SENSORS</span></div><div><b>02</b><span>EDGE PROCESSING</span></div><div><b>03</b><span>AI RISK</span></div><div><b>04</b><span>6-HOUR FORECAST</span></div><div><b>05</b><span>CAMERA</span></div><div><b>06</b><span>ALERT &amp; ACTION</span></div></div></article>
+  </div>
+
+  <!-- ═══════════ 1. RISK PREDICTION SECTION ═══════════ -->
+  <div class="section-heading">
+    <div>
+      <div class="eyebrow">FORECAST &amp; OUTLOOK</div>
+      <h2>Risk Prediction</h2>
+      <p>Forecasted environmental risk based on current conditions and recent trends.</p>
+    </div>
+  </div>
+
+  <div class="prediction-grid" id="prediction-grid">
+    <article class="panel prediction-card">
+      <div class="prediction-card-header">
+        <span class="eyebrow">NEXT 1H RISK</span>
+        <span class="risk-badge unknown" id="pred-1h-badge">N/A</span>
+      </div>
+      <div class="prediction-score-row">
+        <strong id="pred-1h-score">--%</strong>
+      </div>
+      <div class="prediction-meta">
+        <div><span>Predicted Rainfall</span><strong id="pred-1h-rain">-- mm</strong></div>
+        <div><span>Predicted Water Level</span><strong id="pred-1h-water">-- m</strong></div>
+      </div>
+      <div class="prediction-trend" id="pred-1h-trend">
+        <span>Risk trend</span> <strong>--</strong>
+      </div>
+    </article>
+
+    <article class="panel prediction-card">
+      <div class="prediction-card-header">
+        <span class="eyebrow">NEXT 3H RISK</span>
+        <span class="risk-badge unknown" id="pred-3h-badge">N/A</span>
+      </div>
+      <div class="prediction-score-row">
+        <strong id="pred-3h-score">--%</strong>
+      </div>
+      <div class="prediction-meta">
+        <div><span>Predicted Rainfall</span><strong id="pred-3h-rain">-- mm</strong></div>
+        <div><span>Predicted Water Level</span><strong id="pred-3h-water">-- m</strong></div>
+      </div>
+      <div class="prediction-trend" id="pred-3h-trend">
+        <span>Risk trend</span> <strong>--</strong>
+      </div>
+    </article>
+
+    <article class="panel prediction-card">
+      <div class="prediction-card-header">
+        <span class="eyebrow">NEXT 6H RISK</span>
+        <span class="risk-badge unknown" id="pred-6h-badge">N/A</span>
+      </div>
+      <div class="prediction-score-row">
+        <strong id="pred-6h-score">--%</strong>
+      </div>
+      <div class="prediction-meta">
+        <div><span>Predicted Rainfall</span><strong id="pred-6h-rain">-- mm</strong></div>
+        <div><span>Predicted Water Level</span><strong id="pred-6h-water">-- m</strong></div>
+      </div>
+      <div class="prediction-trend" id="pred-6h-trend">
+        <span>Risk trend</span> <strong>--</strong>
+      </div>
+    </article>
+  </div>
+
+  <!-- ═══════════ 2. WEATHER INTELLIGENCE SECTION ═══════════ -->
+  <div class="section-heading">
+    <div>
+      <div class="eyebrow">ATMOSPHERIC MONITORING</div>
+      <h2>Weather</h2>
+      <p>Current conditions and short-term weather forecast.</p>
+    </div>
+  </div>
+
+  <article class="panel weather-panel" id="weather-panel">
+    <div class="weather-grid">
+      <div class="weather-current-card">
+        <span class="eyebrow">CURRENT CONDITIONS</span>
+        <div class="weather-hero">
+          <span class="weather-icon" id="weather-icon">☁</span>
+          <div>
+            <strong id="weather-temp">--°C</strong>
+            <span id="weather-condition" class="muted">Awaiting data</span>
+          </div>
+        </div>
+        <div class="weather-details">
+          <div><span>Rain</span> <strong id="weather-rain">--</strong></div>
+          <div><span>Rain probability</span> <strong id="weather-rain-prob">--%</strong></div>
+          <div><span>Wind</span> <strong id="weather-wind">--</strong></div>
+          <div><span>Humidity</span> <strong id="weather-humidity">--%</strong></div>
+        </div>
+      </div>
+
+      <div class="weather-hourly-card">
+        <span class="eyebrow">HOURLY FORECAST</span>
+        <div class="hourly-forecast-scroll" id="hourly-forecast-list">
+          <div class="hourly-empty">Awaiting forecast telemetry...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="weather-warning-banner" id="weather-warning-banner" style="display:none">
+      <div class="warning-icon">⚠</div>
+      <div>
+        <strong>WEATHER WARNING</strong>
+        <p id="weather-warning-message">Heavy rainfall expected. Monitor water levels closely.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- ═══════════ EXISTING DASHBOARD SECTIONS ═══════════ -->
+  <div class="hero-grid"><article class="panel risk-hero"><div class="panel-heading"><div><div class="eyebrow">CURRENT ENVIRONMENTAL RISK</div><h2>Operational Risk</h2></div><span class="live-chip"><i></i> LIVE</span></div><div class="risk-readout"><div><strong id="overall-score">N/A</strong><span>/100</span></div><span class="risk-badge unknown" id="overall-status">N/A</span></div><div class="meter"><span id="overall-meter"></span></div><div class="meter-labels"><span>LOW</span><span>MODERATE</span><span>HIGH</span><span>CRITICAL</span></div><p class="ai-summary"><i></i><span id="overall-description">Waiting for live sensor data.</span></p></article><article class="panel forecast-hero"><div class="panel-heading"><div><div class="eyebrow">PREDICTIVE INTELLIGENCE</div><h2>6-Hour Early Warning</h2></div><span class="panel-glyph">↗</span></div><div class="forecast-flow"><div><small>CURRENT</small><strong id="forecast-current-status">N/A</strong></div><b>→</b><div><small>+6 HOURS</small><strong id="forecast-status">N/A</strong></div></div><div class="forecast-facts"><div><small>PREDICTED RISK</small><strong><span id="forecast-score">N/A</span><small>/100</small></strong></div><div><small>CONFIDENCE</small><strong id="forecast-confidence">N/A</strong></div><div><small>HAZARD</small><strong id="forecast-hazard">N/A</strong></div></div><p class="muted" id="forecast-message">Collecting historical sensor data...</p><small class="disclaimer">Model-based forecast. Not a guaranteed prediction.</small></article></div><div class="section-heading"><div><div class="eyebrow">SYSTEM HEALTH</div><h2>Monitoring Pipeline</h2></div><span class="data-state" id="data-note">No live data</span></div><div class="health-grid" id="health-grid"></div><div class="section-heading"><div><div class="eyebrow">LIVE TELEMETRY</div><h2>Environmental Conditions</h2></div></div><div class="metric-grid" id="metric-grid"></div><div class="split-grid"><article class="panel chart-panel"><div class="panel-heading"><div><div class="eyebrow">REAL-TIME DATA</div><h2>Environmental Trend</h2></div><select id="chart-select" aria-label="Select telemetry chart"><option value="temperature">Temperature</option><option value="rainfall">Rainfall</option><option value="water_level">Water Level</option><option value="mq135_raw">Air Quality</option></select></div><div class="chart-stats"><div><small>CURRENT</small><strong id="chart-current">N/A</strong></div><div><small>MIN</small><strong id="chart-min">N/A</strong></div><div><small>MAX</small><strong id="chart-max">N/A</strong></div></div><div class="chart-wrap"><canvas id="telemetry-chart"></canvas><span class="chart-empty" id="chart-empty">Waiting for sensor telemetry...</span></div></article><article class="panel"><div class="panel-heading"><div><div class="eyebrow">ATTENTION QUEUE</div><h2>Recent Alerts</h2></div><span class="count" id="alert-count">0</span></div><div class="alert-list" id="alert-list"><div class="empty-state">No alerts received from backend.</div></div></article></div><div class="split-grid map-split"><article class="panel"><div class="panel-heading"><div><div class="eyebrow">FIELD COVERAGE</div><h2>Monitoring Map</h2></div><span class="map-live">● LIVE NODE</span></div><div class="map-container-wrap"><div class="map" id="map"></div></div><p class="map-note" id="map-note">Waiting for live node coordinates.</p></article><article class="panel pipeline-panel"><div class="eyebrow">CLOUDGUARD PIPELINE</div><h2>From sensing to action</h2><div class="pipeline"><div><b>01</b><span>SENSORS</span></div><div><b>02</b><span>EDGE PROCESSING</span></div><div><b>03</b><span>AI RISK ANALYSIS</span></div><div><b>04</b><span>6-HOUR FORECAST</span></div><div><b>05</b><span>CAMERA VERIFICATION</span></div><div><b>06</b><span>ALERT &amp; ACTION</span></div></div></article></div></section>
+
+<section id="sensors" class="page-section live-sensors-page cg-live-sensors">
+  <div class="section-heading page-heading">
+    <div>
+      <div class="eyebrow">DISTRIBUTED FIELD NETWORK</div>
+      <h2>Live Sensors</h2>
+      <p>Real-time environmental telemetry from connected field devices</p>
+    </div>
+  </div>
+
+  <div class="live-device-status-grid panel">
+    <div class="live-status-card">
+      <span class="eyebrow">ACTIVE NODE</span>
+      <strong id="node-id">N/A</strong>
+    </div>
+    <div class="live-status-card">
+      <span class="eyebrow">CONNECTION</span>
+      <strong id="node-connection">● OFFLINE</strong>
+    </div>
+    <div class="live-status-card">
+      <span class="eyebrow">LAST RECEIVED</span>
+      <strong id="node-time">N/A</strong>
+    </div>
+    <div class="live-status-card">
+      <span class="eyebrow">AVAILABILITY</span>
+      <strong id="node-availability">NO DATA</strong>
+    </div>
+    <div class="live-status-card">
+      <span class="eyebrow">CURRENT RISK</span>
+      <span id="node-risk" class="risk-badge unknown">N/A</span>
+    </div>
+  </div>
+
+  <div class="cg-live-sensors-header">
+    <div class="cg-section-label">TELEMETRY GRID</div>
+    <h2>Environmental Telemetry</h2>
+    <p>Real-time environmental sensor readings from connected field devices.</p>
+  </div>
+
+  <div class="cg-sensor-grid" id="sensor-detail-grid"></div>
+</section>
+
+<section id="risks" class="page-section risk-operations-page">
+  <div class="section-heading page-heading">
+    <div>
+      <div class="eyebrow">AI RISK ENGINE</div>
+      <h2>Risk Intelligence</h2>
+      <p>Hazard triage and operational context from the active environmental payload.</p>
+    </div>
+    <span class="operations-badge"><i></i> INCIDENT PRIORITY BOARD</span>
+  </div>
+  <div class="risk-command-strip">
+    <div><span class="eyebrow">ASSESSMENT MODE</span><strong>Current conditions</strong><small>Live sensor fusion</small></div>
+    <div><span class="eyebrow">DECISION STATUS</span><strong id="risk-board-status">Awaiting data</strong><small>Verify before escalation</small></div>
+    <div><span class="eyebrow">RESPONSE PRINCIPLE</span><strong>Monitor · Verify · Act</strong><small>Use field confirmation for action</small></div>
+  </div>
+  <div class="risk-board-heading"><div><div class="eyebrow">HAZARD ASSESSMENT</div><h3>Priority threats</h3></div><span class="data-state">NO LIVE DATA</span></div>
+  <div class="risk-grid" id="risk-grid"></div>
+</section>
+
+<section id="forecast" class="page-section forecast-operations-page">
+  <div class="section-heading page-heading">
+    <div>
+      <div class="eyebrow">MODEL-BASED OUTLOOK</div>
+      <h2>6-Hour Early Warning</h2>
+      <p>Decision support for emergency coordinators based on recent field conditions.</p>
+    </div>
+    <span class="operations-badge"><i></i> DECISION SUPPORT</span>
+  </div>
+
+  <article class="panel forecast-command-card">
+    <div class="forecast-command-header">
+      <div>
+        <span class="eyebrow">OPERATIONAL FORECAST</span>
+        <h3>Environmental risk outlook</h3>
+        <p>Use this outlook to prepare monitoring, verification, and response resources.</p>
+      </div>
+      <div class="forecast-validity"><span>VALID HORIZON</span><strong id="page-forecast-horizon">N/A</strong></div>
+    </div>
+    <div class="forecast-flow large">
+      <div class="forecast-stage"><small>CURRENT STATUS</small><strong id="page-forecast-current">N/A</strong><span>Observed field conditions</span></div>
+      <b class="forecast-arrow">→</b>
+      <div class="forecast-stage forecast-stage-primary"><small>EXPECTED IN 6 HOURS</small><strong id="page-forecast-status">N/A</strong><span>Model-based projection</span></div>
+    </div>
+    <div class="forecast-facts large-facts">
+      <div><small>PREDICTED RISK</small><strong id="page-forecast-score">N/A</strong><span>out of 100</span></div>
+      <div><small>MODEL CONFIDENCE</small><strong id="page-forecast-confidence">N/A</strong><span>forecast reliability</span></div>
+      <div><small>PRIMARY HAZARD</small><strong id="page-forecast-hazard">N/A</strong><span>highest projected threat</span></div>
+    </div>
+    <div class="forecast-callout"><span class="callout-marker">i</span><p id="page-forecast-message">Forecast unavailable. Collecting historical sensor data...</p></div>
+    <small class="disclaimer">Model-based decision support. Confirm conditions with live sensors and field teams before taking action.</small>
+  </article>
+
+  <div class="section-heading compact forecast-section-heading"><div><div class="eyebrow">HAZARD SCREENING</div><h2>Predicted Risk by Hazard</h2></div><span class="data-state">PRIORITIZE VERIFICATION</span></div>
+  <div class="probability-grid" id="probability-grid"></div>
+
+  <div class="section-heading compact forecast-section-heading"><div><div class="eyebrow">RESPONSE POSTURE</div><h2>Recommended Operating Actions</h2></div></div>
+  <div class="response-posture-grid">
+    <article class="response-posture-card"><span class="response-number">01</span><div><strong>Monitor</strong><p>Keep sensor telemetry and alert channels under active review.</p></div></article>
+    <article class="response-posture-card"><span class="response-number">02</span><div><strong>Verify</strong><p>Confirm emerging hazards with camera evidence and field teams.</p></div></article>
+    <article class="response-posture-card"><span class="response-number">03</span><div><strong>Escalate</strong><p>Notify responsible coordinators when thresholds are reached.</p></div></article>
+  </div>
+</section>
+
+<section id="camera" class="page-section camera-operations-page">
+  <div class="section-heading page-heading">
+    <div>
+      <div class="eyebrow">VISUAL VERIFICATION</div>
+      <h2>Camera Vision</h2>
+      <p>Visual evidence for confirming environmental hazards before escalation.</p>
+    </div>
+    <span class="operations-badge"><i></i> EVIDENCE REVIEW</span>
+  </div>
+  <div class="camera-command-strip">
+    <div><span class="eyebrow">EVIDENCE SOURCE</span><strong>ESP32-CAM</strong><small>Field visual verification</small></div>
+    <div><span class="eyebrow">CAMERA STATUS</span><strong id="camera-operation-status">Unavailable</strong><small>Connection and capture state</small></div>
+    <div><span class="eyebrow">REVIEW PURPOSE</span><strong>Confirm conditions</strong><small>Support response decisions</small></div>
+  </div>
+  <div class="camera-layout">
+    <article class="panel camera-frame">
+      <div class="frame-label"><span>LATEST FIELD CAPTURE</span><strong id="camera-live-label">UNAVAILABLE</strong></div>
+      <div class="image-stage" id="camera-stage"><span>Waiting for camera image</span></div>
+      <div class="camera-meta">
+        <div><small>NODE</small><strong id="camera-node">N/A</strong></div>
+        <div><small>LAST CAPTURE</small><strong id="camera-time">N/A</strong></div>
+        <div><small>VISION CONFIDENCE</small><strong id="camera-confidence">N/A</strong></div>
+      </div>
+    </article>
+    <article class="panel vision-card">
+      <div class="eyebrow">AI VISUAL ASSESSMENT</div>
+      <h2 id="vision-status">Unavailable</h2>
+      <p class="vision-intro">Camera evidence is reviewed alongside sensor telemetry and field reports.</p>
+      <div class="vision-row"><span>Vision message</span><strong id="vision-message">No camera evidence</strong></div>
+      <div class="vision-row"><span>Camera connection</span><strong id="vision-connection">Offline</strong></div>
+      <div class="vision-row"><span>Image analysis</span><strong id="vision-analysis">Unavailable</strong></div>
+      <div class="vision-row"><span>Evidence source</span><strong>ESP32-CAM</strong></div>
+      <div class="vision-guidance"><span>NEXT ACTION</span><strong>Confirm visual conditions before escalation.</strong></div>
+    </article>
+  </div>
+</section>
+
+<section id="alerts" class="page-section alert-operations-page">
+  <div class="section-heading page-heading">
+    <div>
+      <div class="eyebrow">INCIDENT RESPONSE</div>
+      <h2>Alert Center</h2>
+      <p>Backend-reported events requiring operational review and coordinated response.</p>
+    </div>
+    <span class="operations-badge"><i></i> RESPONSE CHANNEL</span>
+  </div>
+  <div class="alert-command-strip">
+    <div><span class="eyebrow">RESPONSE MODE</span><strong>Monitor and verify</strong><small>Escalate confirmed threats</small></div>
+    <div><span class="eyebrow">EVENT SOURCE</span><strong>CloudGuard backend</strong><small>Validated system events only</small></div>
+    <div><span class="eyebrow">LAST REVIEW</span><strong id="alert-review-state">Awaiting events</strong><small>Operational event stream</small></div>
+  </div>
+  <div class="alert-summary">
+    <div><small>ACTIVE ALERTS</small><strong id="alert-total">0</strong><span>All open events</span></div>
+    <div><small>CRITICAL</small><strong id="critical-alert-count">0</strong><span>Immediate coordination</span></div>
+    <div><small>WARNING</small><strong id="warning-alert-count">0</strong><span>Verify conditions</span></div>
+    <div><small>WATCH</small><strong id="watch-alert-count">0</strong><span>Monitor trend</span></div>
+  </div>
+  <article class="panel timeline-panel">
+    <div class="panel-heading"><div><div class="eyebrow">EVENT LOG</div><h2>Environmental Alert Timeline</h2></div><span class="data-state">BACKEND EVENTS</span></div>
+    <div class="alert-list" id="alert-page-list"><div class="empty-state">No alerts received from backend.</div></div>
+  </article>
+</section>
+
+<!-- ═══════════ MONITORING MAP PAGE ═══════════ -->
+<section id="map-page" class="page-section map-operations-page">
+  <div class="section-heading page-heading">
+    <div>
+      <div class="eyebrow">GEOSPATIAL INTELLIGENCE</div>
+      <h2>Monitoring Map</h2>
+      <p>Geospatial coordination view for CloudGuard sensors, risk zones, cameras, and alerts.</p>
+    </div>
+    <span class="operations-badge"><i></i> GEOSPATIAL OPERATIONS</span>
+  </div>
+
+  <div class="map-command-strip">
+    <div><span class="eyebrow">NETWORK VIEW</span><strong>Field intelligence map</strong><small>Sensor and hazard locations</small></div>
+    <div><span class="eyebrow">ACTIVE NODES</span><strong id="map-node-count">0</strong><small>Connected monitoring devices</small></div>
+    <div><span class="eyebrow">MAP STATUS</span><strong id="map-operation-status">Standby</strong><small>Awaiting live coordinates</small></div>
+  </div>
+
+  <article class="panel full-map-panel">
+    <!-- Map Toolbar -->
+    <div class="cg-map-toolbar">
+      <div class="cg-map-search-group">
+        <input type="text" id="map-search-input" class="cg-map-search-input" placeholder="Search node or zone (e.g. CG01, Zone A)..." aria-label="Search map nodes or zones">
+        <button type="button" id="map-search-btn" class="cg-map-btn" aria-label="Search">🔍</button>
+      </div>
+
+      <div class="cg-map-type-selector">
+        <button type="button" class="cg-map-type-btn active" data-map-type="roadmap">Roadmap</button>
+        <button type="button" class="cg-map-type-btn" data-map-type="satellite">Satellite</button>
+        <button type="button" class="cg-map-type-btn" data-map-type="hybrid">Hybrid</button>
+        <button type="button" class="cg-map-type-btn" data-map-type="terrain">Terrain</button>
+      </div>
+
+      <div class="cg-map-actions">
+        <button type="button" id="map-fit-btn" class="cg-map-btn cg-map-btn-accent" title="Fit all sensor markers">Fit All</button>
+        <button type="button" id="map-location-btn" class="cg-map-btn" title="Center map to my location">My Location</button>
+      </div>
+    </div>
+
+    <!-- Map Layer Toggles -->
+    <div class="cg-map-layer-toggles">
+      <span class="cg-layer-title">LAYERS:</span>
+      <label class="cg-layer-chip"><input type="checkbox" id="layer-sensors" checked> <span>Sensors</span></label>
+      <label class="cg-layer-chip"><input type="checkbox" id="layer-zones" checked> <span>Risk Zones</span></label>
+      <label class="cg-layer-chip"><input type="checkbox" id="layer-heatmap" checked> <span>Heatmap</span></label>
+      <label class="cg-layer-chip"><input type="checkbox" id="layer-cameras" checked> <span>Cameras</span></label>
+      <label class="cg-layer-chip"><input type="checkbox" id="layer-alerts" checked> <span>Active Alerts</span></label>
+    </div>
+
+    <!-- Map Element Wrapper -->
+    <div class="map-container-wrap full-map-wrap">
+      <div class="map" id="large-map"></div>
+
+      <!-- Map Legend Overlay -->
+      <div class="cg-map-legend" id="map-legend">
+        <div class="cg-legend-section">
+          <span class="cg-legend-heading">RISK LEVEL</span>
+          <div class="cg-legend-items">
+            <span class="cg-legend-item"><i class="cg-dot normal"></i> Normal (0-29%)</span>
+            <span class="cg-legend-item"><i class="cg-dot watch"></i> Watch (30-59%)</span>
+            <span class="cg-legend-item"><i class="cg-dot warning"></i> Warning (60-79%)</span>
+            <span class="cg-legend-item"><i class="cg-dot critical"></i> Critical (80-100%)</span>
+          </div>
+        </div>
+        <div class="cg-legend-section">
+          <span class="cg-legend-heading">DEVICE STATUS</span>
+          <div class="cg-legend-items">
+            <span class="cg-legend-item"><i class="cg-dot status-on"></i> Online</span>
+            <span class="cg-legend-item"><i class="cg-dot status-off"></i> Offline</span>
+            <span class="cg-legend-item"><i class="cg-dot status-stale"></i> Stale</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="map-note" id="large-map-note">Waiting for live node coordinates.</p>
+  </article>
+</section>
+
+<!-- ═══════════ NOTIFICATION HISTORY SECTION (12th view) ═══════════ -->
+<section id="reports" class="page-section">
+  <div class="section-heading page-heading">
+    <div>
+      <div class="eyebrow">INTELLIGENCE REPORTS</div>
+      <h2>Environmental intelligence reports</h2>
+      <p>Filter stored sensor evidence and generate a factual incident record for operations.</p>
+    </div>
+  </div>
+
+  <article class="panel report-config report-config-card">
+    <div class="report-config-heading">
+      <div><span class="eyebrow">REPORT CONFIGURATION</span><h3>Choose evidence scope</h3><p class="muted">Filter stored sensor evidence and generate an incident record for operations.</p></div>
+      <span class="report-config-state" id="report-config-state">Ready</span>
+    </div>
+    <div class="report-filter-grid">
+      <div class="form-field">
+        <label for="report-incident">Incident Type</label>
+        <select id="report-incident">
+          <option value="Flood Risk">Flood Risk</option>
+          <option value="Landslide Risk">Landslide Risk</option>
+          <option value="Air Quality Risk">Air Quality Risk</option>
+          <option value="All Incidents">All Incidents</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="report-device">Device</label>
+        <select id="report-device">
+          <option value="all">All Nodes</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="report-location">Location</label>
+        <select id="report-location">
+          <option value="all">All Zones</option>
+          <option value="Zone A">Zone A</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="report-severity">Severity</label>
+        <select id="report-severity">
+          <option value="all">All</option>
+          <option value="NORMAL">Normal</option>
+          <option value="WATCH">Watch</option>
+          <option value="WARNING">Warning</option>
+          <option value="CRITICAL">Critical</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="report-start">From Date</label>
+        <input id="report-start" type="datetime-local">
+      </div>
+      <div class="form-field">
+        <label for="report-end">To Date</label>
+        <input id="report-end" type="datetime-local">
+      </div>
+    </div>
+    <div class="report-config-actions">
+      <button type="button" class="btn btn-primary" id="generate-report-btn">Generate Report</button>
+    </div>
+  </article>
+
+  <article class="panel report-preview report-card" id="incident-report-output">
+    <div class="report-empty">
+      <span class="eyebrow">CLOUDGUARD INCIDENT REPORT</span>
+      <h3>Generate a report to inspect live evidence</h3>
+      <p>Every value below is calculated from the selected CloudGuard backend history.</p>
+    </div>
+    <div class="report-card-actions" id="report-export-container">
+      <button type="button" class="btn btn-secondary" id="export-report-pdf">Export PDF</button>
+      <button type="button" class="btn btn-secondary" id="export-report-csv">Export CSV</button>
+      <button type="button" class="btn btn-secondary" id="export-report-json">Export JSON</button>
+    </div>
+  </article>
+</section>
+
+<section id="settings" class="page-section settings-page">
+  <div class="section-heading page-heading">
+    <div>
+      <div class="eyebrow">SYSTEM CONFIGURATION</div>
+      <h2>Settings</h2>
+      <p>Manage dashboard appearance, notification behavior, and weather context.</p>
+    </div>
+    <span class="operations-badge"><i></i> LOCAL PREFERENCES</span>
+  </div>
+
+  <div class="settings-layout">
+    <article class="panel settings-card">
+      <div class="settings-card-heading"><div><div class="eyebrow">APPEARANCE</div><h3>Dashboard display</h3></div><span class="settings-icon">◐</span></div>
+      <label class="settings-field"><span>Theme</span><select id="settings-theme"><option value="light">Light</option><option value="dark">Dark</option></select></label>
+      <label class="settings-toggle-row"><span><strong>Compact dashboard</strong><small>Reduce spacing to show more operational data at once.</small></span><input type="checkbox" id="settings-compact"><i></i></label>
+      <p class="settings-help">Use a neutral light or dark interface for control-room conditions.</p>
+    </article>
+    <article class="panel settings-card">
+      <div class="settings-card-heading"><div><div class="eyebrow">NOTIFICATIONS</div><h3>Response alerts</h3></div><span class="settings-icon">!</span></div>
+      <label class="settings-toggle-row"><span><strong>Enable notification events</strong><small>Show sensor and system events in the notification center.</small></span><input type="checkbox" id="settings-notifications" checked><i></i></label>
+      <label class="settings-toggle-row"><span><strong>Sound for critical alerts</strong><small>Reserve attention cues for critical events.</small></span><input type="checkbox" id="settings-critical-sound"><i></i></label>
+    </article>
+    <article class="panel settings-card">
+      <div class="settings-card-heading"><div><div class="eyebrow">WEATHER CONTEXT</div><h3>Forecast location</h3></div><span class="settings-icon">⌖</span></div>
+      <div class="settings-field-grid"><label class="settings-field"><span>Latitude</span><input id="settings-latitude" type="number" step="0.0001" placeholder="13.0827"></label><label class="settings-field"><span>Longitude</span><input id="settings-longitude" type="number" step="0.0001" placeholder="80.2707"></label></div>
+      <p class="settings-help">Used by the weather service when field sensor weather data is unavailable.</p>
+    </article>
+    <article class="panel settings-card">
+      <div class="settings-card-heading"><div><div class="eyebrow">DATA REFRESH</div><h3>Telemetry cadence</h3></div><span class="settings-icon">↻</span></div>
+      <label class="settings-field"><span>Refresh interval</span><select id="settings-refresh"><option value="3000">Every 3 seconds</option><option value="5000">Every 5 seconds</option><option value="10000">Every 10 seconds</option><option value="30000">Every 30 seconds</option></select></label>
+      <p class="settings-help">Controls how often the dashboard requests current sensor data.</p>
+    </article>
+    <article class="panel settings-card settings-status-card">
+      <div class="settings-card-heading"><div><div class="eyebrow">CONTROL ROOM</div><h3>Local preferences</h3></div><span class="settings-icon">✓</span></div>
+      <div class="settings-status-row"><span>Storage</span><strong>Browser local storage</strong></div>
+      <div class="settings-status-row"><span>Configuration state</span><strong id="settings-save-state">Saved automatically</strong></div>
+      <button type="button" class="settings-reset-btn" id="settings-reset">Reset preferences</button>
+    </article>
+  </div>
+</section>
+
+<section id="notification-history" class="page-section">
+  <div class="section-heading page-heading">
+    <div>
+      <div class="eyebrow">EVENT LOG &amp; AUDIT TRAIL</div>
+      <h2>Notification Center</h2>
+      <p>Operational event stream, hazard escalation logs, and system audit history.</p>
+    </div>
+    <button type="button" class="nh-back-btn" data-section="overview" id="nh-back-btn">← Back</button>
+  </div>
+
+  <div class="nh-toolbar">
+    <div class="nh-filters" role="tablist" aria-label="Filter notifications">
+      <button type="button" class="nh-filter-btn active" data-filter="all" role="tab" aria-selected="true">All <b class="nh-count" id="count-all">0</b></button>
+      <button type="button" class="nh-filter-btn" data-filter="critical" role="tab" aria-selected="false">Critical <b class="nh-count" id="count-critical">0</b></button>
+      <button type="button" class="nh-filter-btn" data-filter="warning" role="tab" aria-selected="false">Warning <b class="nh-count" id="count-warning">0</b></button>
+      <button type="button" class="nh-filter-btn" data-filter="info" role="tab" aria-selected="false">Info <b class="nh-count" id="count-info">0</b></button>
+      <button type="button" class="nh-filter-btn" data-filter="system" role="tab" aria-selected="false">System <b class="nh-count" id="count-system">0</b></button>
+    </div>
+    <div class="nh-actions">
+      <button type="button" class="nh-action-btn" id="history-mark-all-read">Mark all read</button>
+      <button type="button" class="nh-action-btn nh-action-danger" id="history-clear-all">Clear history</button>
+    </div>
+  </div>
+
+  <article class="panel nh-panel">
+    <div id="notification-history-list" class="nh-list">
+      <!-- Populated by NotificationManager -->
+    </div>
+  </article>
+</section>
+<!-- ════════════════════════════════════════════════════════════════ -->
+
+</main>
+</div>
+
+<!-- Screen-reader live region for critical notifications -->
+<div id="notification-live-announcer" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
+
+<!-- Load local configuration before main script -->
+<script src="config/config.example.js"></script>
+<script src="js/script.js?v=operations-dashboard-3"></script>
+</body>
+</html>

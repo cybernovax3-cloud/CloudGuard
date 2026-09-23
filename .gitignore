@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+venv_new/
+
+# Local configuration and credentials
+.env
+*.env
+!.env.example
+firebase-service-account.json
+**/firebase-service-account.json
+frontend/config/config.js
+**/config.js
+
+# Generated data and model artifacts
+*.db
+*.sqlite
+*.sqlite3
+*.joblib
+captures/
+cloudguard_captures/
+**/camera_uploads/
+*.zip
+*.7z
+*.rar
+*.mp4
+*.mov
+
+# JavaScript dependencies and builds
+node_modules/
+dist/
+build/
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local logs
+*.log
