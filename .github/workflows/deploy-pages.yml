@@ -23,9 +23,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Prepare frontend artifact
+        env:
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
         run: |
           cp -R frontend _site
-          rm -f _site/config/config.js
+          printf 'window.GOOGLE_MAPS_API_KEY = "%s";\n' "$GOOGLE_MAPS_API_KEY" > _site/config/config.js
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
