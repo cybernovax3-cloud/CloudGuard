@@ -130,9 +130,19 @@ Do not commit `config.js` or real keys. Restrict the Google Maps browser key to 
 
 GitHub Pages hosts static files only and cannot execute Flask or provide Firebase credentials. Deploy `backend/` separately to a Python-capable service, configure Firebase and notification secrets there, and point the frontend at that API URL.
 
+### Render Deployment
+
+Use the backend directory as the Render service root. Install dependencies from `requirements.txt` and use this start command:
+
+```text
+gunicorn app:app
+```
+
+The Flask application listens on Render's `PORT` environment variable when launched directly; Gunicorn binds the service port in production.
+
 ## Environment Variables
 
-Copy `backend/.env.example` to `backend/.env` locally. Set `FRONTEND_ORIGIN` to the local frontend origin during development, then to the exact GitHub Pages origin in production. Keep Firebase service-account credentials, database URLs, Twilio values, alert recipients, and other secrets outside Git. Rotate credentials that appeared in the original nested project before production use.
+Copy `backend/.env.example` to `backend/.env` locally, or add the same variables as Render environment variables. The backend currently uses `FIREBASE_CREDENTIALS_PATH`, `FIREBASE_DATABASE_URL`, `FRONTEND_ORIGIN`, `SMS_PROVIDER`, `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM_NUMBER`, `TWILIO_TEST_RECIPIENT`, `ALERT_PHONE`, `ALERT_RECIPIENTS`, `ALERT_COOLDOWN_SECONDS`, `CAMERA_COOLDOWN_SECONDS`, `CLOUDGUARD_VISION_MODEL`, `WEATHER_LATITUDE`, and `WEATHER_LONGITUDE`. Set `FRONTEND_ORIGIN` to the exact deployed frontend origin in production. Gmail variables are not used by the current backend and are intentionally not included. Keep Firebase service-account credentials, database URLs, Twilio values, alert recipients, and other secrets outside Git. Rotate credentials that appeared in the original nested project before production use.
 
 ## API
 
